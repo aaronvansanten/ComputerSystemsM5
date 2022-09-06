@@ -39,6 +39,14 @@ Consider a statement $\alpha$ that merely contains the connectives $\neg$, $\lan
 - $T_0$ by $F_0$
 - $F_0$ by $T_0$
 
+Therefore, when two statements only contain $\neg$, $\land$ and $\lor$:
 
+$\alpha \Leftrightarrow \beta$ then $\alpha^d \Leftrightarrow \beta^d$
 
+This is used for proving the second statement in L2 - L10; you now only have to prove one of the two rules instead of both.A
 
+### Substitution rule 1:
+If we replace each occurence of a primitive proposition in a tautology by the same statement $\beta$, the resulting statement is also a tautology.A
+
+### Substitution rule 2
+Let $\alpha$, $\beta$ and $\gamma$ be compound statements and suppose $\gamma \Leftrightarrow \beta$. If we replace one or more occurrences of $\beta$ in $\alpha$ by $\gamma$, then the resulting statement $\alpha^*$ satisfies $\alpha \Leftrightarrow \alpha^*$.
