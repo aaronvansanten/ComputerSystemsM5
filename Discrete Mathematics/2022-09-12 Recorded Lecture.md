@@ -3,7 +3,7 @@
 ## Predicate logic
 Predicate = property
 
-Open statement: an assesrtion that contains one or more free variables which can be chosen from a fixed universe U. Without free variables is a closed statement.
+Open statement: an assertion that contains one or more free variables which can be chosen from a fixed universe U. Without free variables is a closed statement.
 
 $\forall x p(x)$ means: $p(x)$ is true for all $x \in U$.
 
