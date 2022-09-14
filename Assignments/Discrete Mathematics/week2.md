@@ -32,10 +32,10 @@ $\forall m, n : 0 < A[m,n] \leq 70$
 $\exists m, n : A[m,n] > 60$
 
 ### Question d) 
-$\forall m, [1 \leq n \leq 20] A[m,n] > A(m,n-1)$
+$\forall m, [2 \leq n \leq 20] A[m,n] > A(m,n-1)$
 
 ### Question e) 
-$\forall n, [1 \leq m \leq 20] A[m,n] > A(m-1,n)$
+$\forall n, [2 \leq m \leq 20] A[m,n] > A(m-1,n)$
 
 ### Question f) 
 $???$
@@ -73,10 +73,11 @@ Statement (b) remains true in the new universe but statement (c) does not.
 Step | Item
 | - | - | 
 $\forall x \forall y [(x > y) \rightarrow (x - y > 0)]$ | Original
-$\neg(\forall x \neg \forall y [(x > y) \rightarrow (x - y > 0)])$ | Negation
-$(\exists x \neg \forall y [\neg(x > y) \rightarrow (x - y > 0)])$ | N1
-$(\exists x \exists y [\neg \neg(x > y) \rightarrow (x - y > 0)])$ | N1
-$(\exists x \exists y [(x > y) \rightarrow (x - y > 0)])$ | double negation
+$\neg (\forall x \forall y [(x > y) \rightarrow (x - y > 0)])$ | Negation
+$\forall x \forall y [\neg (x > y) \rightarrow \neg (x - y > 0)]$ | apply negation
+$\forall x \forall y [\neg \neg (x > y) \lor \neg (x - y > 0)]$ | L12
+$\forall x \forall y [(x > y) \lor \neg (x - y > 0)]$ | L1
+
 
 
 

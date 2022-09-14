@@ -4,17 +4,17 @@
 
 
 # Part b
-| Category           | SAP                                                       | Compiere Community Edition    | Ofbiz Apache                   |
-| :----------------- | :-------------------------------------------------------- | :---------------------------- | :----------------------------- |
-| General Language   | Difficult to read and understand                          | Easy to read and understand   | Easy to read and understand    |
-| Open-source        | No                                                        | Yes                           | Yes                            |
-| LicenseFree to use | No, need to sign contract with SAP                        | Yes                           | Yes                            |
-| Warranty           | 6 Months warranty for the software under three conditions | Not included                  | Own responsibility             |
-| Confidentiality    | NDA enclosed in the contract                              | NA                            | NA                             |
-| Allowed to edit    | Only with explicit allowance of the Licenser (SAP)        | Allowed with restrictions$^1$ | allowed with zero restrictions |
-| Redistribution     | Not allowed                                               | Allowed and encouraged        | Allowed                        |
-| Legal protection   | SAP defends the Licensee up to €500 000                   | None                          | None                           |
-| Patent             | Owned by SAP                                              | Protected against             | Not mentioned                  |
+| Category           | SAP                                                       | Compiere Community Edition    | Ofbiz Apache                   | MIT                         |
+| :----------------- | :-------------------------------------------------------- | :---------------------------- | :----------------------------- | --------------------------- |
+| General Language   | Difficult to read and understand                          | Easy to read and understand   | Easy to read and understand    | Easy to read and understand |
+| Open-source        | No                                                        | Yes                           | Yes                            | Yes                         |
+| LicenseFree to use | No, need to sign contract with SAP                        | Yes                           | Yes                            | Yes                         |
+| Warranty           | 6 Months warranty for the software under three conditions | Not included                  | Own responsibility             | Not included                |
+| Confidentiality    | NDA enclosed in the contract                              | NA                            | NA                             | NA                          |
+| Allowed to edit    | Only with explicit allowance of the Licenser (SAP)        | Allowed with restrictions$^1$ | allowed with zero restrictions | Allowed free of charge      |
+| Redistribution     | Not allowed                                               | Allowed and encouraged        | Allowed                        | Allowed                     |
+| Legal protection   | SAP defends the Licensee up to €500 000                   | None                          | None                           | None                        |
+| Patent             | Owned by SAP                                              | Protected against             | Not mentioned                  | Not mentioned               |
 
 $^1$ Name and date needs to be included, together with notice that you changed the code
 
