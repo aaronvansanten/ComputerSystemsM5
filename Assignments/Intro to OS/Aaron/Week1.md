@@ -120,7 +120,9 @@ the `free(*ptr)` keyword will free up the allocated memory at the reference that
 
 The stack has a LiFo structure. If a function needs memory, a block is placed on top of the stack. If the function has completed running, the block can be popped of the stack to free up the memory. The heap has a dynamic structure. Here, a block of memory is allocated to the function but not necessarily in order with the other functions. This makes it a more efficient storing, but also increases the change of a memory leak.
 
+
 ## **TODO** Assignment 19: *Stack layout*
+
 
 
 
@@ -128,7 +130,9 @@ The stack has a LiFo structure. If a function needs memory, a block is placed on
 
 
 
+
 ## **TODO** Assignment 21: *Creating Processes using Fork*
+
 
 
 
@@ -136,7 +140,9 @@ The stack has a LiFo structure. If a function needs memory, a block is placed on
 
 
 
+
 ## **TODO** Assignment 23: *Using gdb*
+
 
 
 
