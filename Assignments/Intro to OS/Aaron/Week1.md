@@ -28,15 +28,15 @@ I checked if the pi was correctly connected by using `ping blueberry.local`. Thi
 
 ## **TODO** Assignment 6: *Get used to the shell on your Pi*
 I approached the questions by using the following instructions:
-| Question                                                                                             | Instruction                           |
-| ---------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| How can you search through the last commands you executed for a specific one with a certain keyword? | `Control + R` followed by the keyword |
-| How can you rename a directory?                                                                      | `mv oldname newname`                  |
-| How can you easily print the number from 1 to 10?                                                    |                                       |
-| How can you run a specific command 10 times?                                                         |                                       |
-| How can you redirect the output of a command to a file?                                              |                                       |
-| How can you find all manual pages that contain a specific keyword?                                   | `man -k <search term>`                |
-| How can you measure the time it takes to execute a certain command?                                  |                                       |
+| Question                                                                                             | Instruction                            |
+| ---------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| How can you search through the last commands you executed for a specific one with a certain keyword? | `Control + R` followed by the keyword  |
+| How can you rename a directory?                                                                      | `mv oldname newname`                   |
+| How can you easily print the number from 1 to 10?                                                    | `seq 1 10`                             |
+| How can you run a specific command 10 times?                                                         | `for _ in {1..10}; do <command>; done` |
+| How can you redirect the output of a command to a file?                                              | `<command> >> file`                    |
+| How can you find all manual pages that contain a specific keyword?                                   | `man -k <search term>`                 |
+| How can you measure the time it takes to execute a certain command?                                  | `time <command>`                       |
 
 
 ## **TODO** Assignment 7: *Get used to reading manual pages*
@@ -97,13 +97,28 @@ Both programs have a similar output, consisting of printing nodename, sysname, r
 
 
 
-## **TODO** Assignment 17: *Monitor processes on the Pi*
+## Assignment 17: *Monitor processes on the Pi*
+I have chosen `htop` as the tool for myself to monitor the pi. I feel it has the most intuitive interface, and the easiest way to navigate trough the processes. 
+
+| Action                                                                     | Command                                                |
+| -------------------------------------------------------------------------- | ------------------------------------------------------ |
+| How can you see all processes that currently exist on your Pi?             | htop shows this by default                             |
+| How can you see just the processes of your current user?                   | `htop -u` or `u` when in the interface                 |
+| How do you get just those which are currently not sleeping?                | the state column gives an indication about the process |
+| How can you see those that consume the most CPU time?                      | `P` when in the interface                              |
+| How can you see those that consume the most I/O bandwidth (disk activity)? | `M` when in the interface                              |
 
 
 
 ## **TODO** Assignment 18: *Address space*
+- The text segment in the memory corresponds to the written code or the constant variables in the code.
+- The data segment in the memory corresponds to the global and static variables that are declared just after the start of the program.
+- The bss segment in the memory corresponds to the global variables that are not yet defined/
+
+the `free(*ptr)` keyword will free up the allocated memory at the reference that is provided.
 
 
+The stack has a LiFo structure. If a function needs memory, a block is placed on top of the stack. If the function has completed running, the block can be popped of the stack to free up the memory. The heap has a dynamic structure. Here, a block of memory is allocated to the function but not necessarily in order with the other functions. This makes it a more efficient storing, but also increases the change of a memory leak.
 
 ## **TODO** Assignment 19: *Stack layout*
 
