@@ -90,27 +90,56 @@ I made a complete backup of the SD card using the 'disks' utility of Ubuntu. Thi
 
 `gcc HelloWorld.c -o HelloWorld` and then `./HelloWorld`.
 
-## **TODO** Assignment 15: *Get familiar with C*
+## Assignment 15: *Get familiar with C*
+
+Apart from a small difference in which libraries are called, Vname.c uses the arrow operator to reference the desired variables instead of the dot operator. The dot operator is normally used to reference variables of a structure, while the arrow operator accesses the variables which are stored with pointers instead  of references. This is also reflected in how Vname.c allocates memory for the utsname structure and Uname.c creates the utsname structure using referencing.
+
+Both programs output `pi-logmans Linux 5.15.61-v8+ aarch64`.
 
 ## Assignment 16: *Syscalls*
 
 The first difference noticed between my laptop and the Pi is that my laptop has a number of `arch_prctl` calls which are specific to the x86-64 architecture. Therefore the Pi (which runs on ARM) should not have these calls. On my laptop the arch_prctl is followed by a memory map command `mmap` after which the `access` call is made. Then the Pi and laptop make a very similar call with `access` and `faccessat` (they differ mainly in how the filepath is treated, but have the same purpose). There are several other differences, but the biggest one is that my laptop uses a lot more `pread64` calls, where the Pi uses none. It seems that my laptop has much more memory operations and more support/implementation for multithreaded applications as can be seen from the manual pages of these calls.
 
-**TODO - see subquestions**
+Subsequent execution of the program does not differ in output apart from the memory addresses which is to be expected as the OS assigns different virtual memory addresses everytime.
 
-## **TODO** Assignment 17: *Monitor processes on the Pi*
+## Assignment 17: *Monitor processes on the Pi*
 
-## **TODO** Assignment 18: *Address space*
+I chose to use htop as this is what I'm used to on my main system and it is already installed on the Pi. It automatically sorts the processes based on their CPU usage which answers the first question.
+
+To view the disk I/O I had to add this column to the view which could be done in setup -> Columns -> Available Columns -> IO_RATE.
+
+## Assignment 18: *Address space*
+
+The first memory address is the address of the program itself. The second is the address of the program text. Third is a variable defined outside the main function. Fourth is edata, which is initialized data. Then there is a variable defined within the main function. Then `end` is unitialized data. 'd' is the memory address of a pointer. `brk` is the last address the program can currently use for its data. Then more memory is allocated in the lines after that. The new address of `d` is printed and the new memory bound is printed.
+
+`malloc` is used to allocate memory for a program where the program can store its data. This then needs to be freed using `free` after it is no longer used. Otherwise this memory address will only be available once the program exits, which could lead to memory leaks and instability if not controlled. `alloca` allocates memory but automatically frees it once the function that called `alloca()` returns to its caller.
 
 ## **TODO** Assignment 19: *Stack layout*
 
-## **TODO** Assignment 20: *BenchMem*
+## Assignment 20: *BenchMem*
 
-## **TODO** Assignment 21: *Creating Processes using Fork*
+| Allocated memory | System Time | Comments |
+|------------------|-------------|----------|
+| 1024             | 1.357       |          |
+| 2048             | 2.576       |          |
+| 3072             | 4.301       |          |
+| 3800             | 4.658       |          |
+| 3900             | 4.449       |          |
+| 3900             | 4.844       | after reboot |
+
+It seems that the time necessary to allocate a certain size of memory increases linearly. However, it was noticed that while the `sys` time (using the `time` command) increased linearly, the `real` time did seem to grow faster, but this was very inconsistent.
+
+## Assignment 21: *Creating Processes using Fork*
+
+`strace` does not trace the child process by default. `clone()` is the system call for creating the child process. By using `fork -f ./Fork` one can trace the system calls of the child process as well under its new pid.
 
 ## **TODO** Assignment 22: *Fork and strace*
 
+I could not make the child process appear in `htop`. I have tried adding a `sleep(5);` to the Fork program, sorting and filtering within `htop` for the correct pid, spamming the program and more.
+
 ## **TODO** Assignment 23: *Using gdb*
+
+
 
 ## **TODO** Assignment 24: *File permissions*
 
