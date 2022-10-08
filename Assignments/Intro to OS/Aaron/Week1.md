@@ -1,6 +1,6 @@
-## Assignment 1:
+## Assignment 1:*Read about the Raspberry Pi*
 The raspberry pi is a standalone mini computer. It can be used similarly to a normal desktop computer. It can be used for a ton of personal projects and smaller projects. An example of such a project is an automatic greenhouse. Here, trough sensors, the pi would measure humidity of the air and ground, and change conditions based on these readings. This could be by watering the ground to increase humidity, or open a window by a rotor to decrease the humidity in the air. Since we need a constant physical connection to the sensors, a raspberry pi is the ideal candidate for such a project.
-## Assignment 2:
+## Assignment 2:*Get a Raspberry Pi 4 with some accessories*
 The kit is complete. Next to this kit, I bought nothing. I already had the recommended materials myself. These included:
 - A spare thumb drive
 - A connection to an ethernet cable
@@ -53,8 +53,10 @@ The two leds are both labeled:
 To copy the the zip file to the home directory, I used the command `scp intro-files-2022.zip AaronPi@blueberry.local:introfiles `. This copied the zip file into the `~` directory of the raspberry pi under the name 'home'. This was followed by the command `unzip introfiles`. This unzipped the file package and stored it as a directory called 'intro-files'. This directory contained the same C files as the zipped folder.
 ## Assignment 12: *Find a convenient way for you to edit files on the Pi*
 As VsCode is my main editor, I have chosen to connect to the Pi with VsCode. This went really smoothly and I can access all files correctly. To simply view the code on the raspberry pi, `cat <file>` is my preferred way to view the program. To quickly edit a program, such as editing a single line, I am using `nano <file>`.
-## **TODO** Assignment 13: *Backup*
- 
+## Assignment 13: *Backup*
+The command I tried to perform this backup was `gzip -dc ~/Desktop/backup_2017-11-14.gz | sudo dd of=/dev/rdisk1 bs=1m conv=noerror,sync` (with the locations changed to my local device). However, this did not seem to work and I could not figure out how or why.
+
+To perform the backup anyway, I did a manual backup by removing the sd card from the pi, and loading it onto my laptop. This did the trick but costs more time than backing up over SSH. 
 ## Assignment 14: *Compile a simple C program on your Pi and your laptop and run it*
 I compiled the program using `gcc HelloWorld.c`. This created an output file `a.out`. Looking at this output using `./a.out` gave the desired Hello World to appear on screen.
 ## Assignment 15: *Get familiar with C*
@@ -123,8 +125,7 @@ The `free(*ptr)` keyword will free up the allocated memory at the reference that
 
 
 The stack has a FiFo structure. If a function needs memory, a block is placed on top of the stack. If the function has completed running, the block can be popped of the stack to free up the memory. The heap has a dynamic structure. Here, a block of memory is allocated to the function but not necessarily in order with the other functions. This makes it a more efficient storing, but also increases the change of a memory leak.
-
-## **TODO** Assignment 19: *Stack layout*
+## **REVIEW** Assignment 19: *Stack layout*
 The stack looks as follows:
 ```
 Stack:
@@ -143,14 +144,13 @@ Stack:
 ```
 
 There are three functions being called in this program. Each function adds a number of items onto the stack. 
-| Function | Variables              |
-| -------- | ---------------------- |
-| Main     | argc, argv, envp, a, b |
-| bar      | c, d                   |
-| foo      | e, f, g, h, p          |
+| Frame (Function) | Variables              |
+| ---------------- | ---------------------- |
+| Main             | argc, argv, envp, a, b |
+| bar              | c, d                   |
+| foo              | e, f, g, h, p          |
 
 The stack memory dump is created by the `bar` function.
-
 ## Assignment 20: *BenchMem*
 The following graph was made:
 ![](../../../.images/Timings.jpg)
@@ -196,7 +196,6 @@ The first part of every line is the memory address is hexadecimal. As can be see
 ```
 
 Looking at this, I assume the following happens: The stack pointer is moved back to the end of the frame. From here, it stores the given inputs into memory, and loads parts of the input array back into registers. The amount is then added onto the variable stored in register w0 to keep track of the amount of variables that were passed in. After this is done, the stack pointer gets moved back to the original position and the value w0 is returned.
-
 ## Assignment 24: *File permissions*
 | File          | User: Read   | User: Write  |
 | ------------- | ------------ | ------------ |
@@ -204,5 +203,10 @@ Looking at this, I assume the following happens: The stack pointer is moved back
 | `/etc/shadow` | not possible | not possible |
 | `.bashrc`$^1$ | not exist    | not possible |
 $^1$ the file does not exist and cannot be read. The file cannot be created as well by a regular user
+## Assignment 25: *Heap vs. stack (difficult)*
+Looking at the deconstructed functions, the heap allocation needs to perform more actions. This leads me to believe that the stack is faster since less action, and hence less CPU cycles are needed. Next to that, thinking about how it works, the stack is faster as well. The compiler is only concerned about the top of the stack, instead of the entire memory. 
+However, as soon as the data needs to be stored for a longer time, the data needs to be transferred towards the heap. This is a huge disadvantage since both processes need to be executed now instead of only one. 
 
-## **TODO** Assignment 25: *Heap vs. stack (difficult)*
+Some [online research](https://publicwork.wordpress.com/2019/06/27/stack-allocation-vs-heap-allocation-performance-benchmark/) taught me, that, without memory allocation, the stack is always faster than the heap. However, if data in initialized, the heap and stack perform similarly in speed with the heap being a tiny bit faster.
+
+A way to prove this claim will be to allocate a number of variables to both the heap and the stack and time them. Running both functions with a different `N`, I observed no difference. I tried some more tests but was not able to proof my assumptions using this technique. 
