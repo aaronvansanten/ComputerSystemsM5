@@ -56,7 +56,7 @@ As VsCode is my main editor, I have chosen to connect to the Pi with VsCode. Thi
 ## Assignment 13: *Backup*
 The command I tried to perform this backup was `gzip -dc ~/Desktop/backup_2017-11-14.gz | sudo dd of=/dev/rdisk1 bs=1m conv=noerror,sync` (with the locations changed to my local device). However, this did not seem to work and I could not figure out how or why.
 
-To perform the backup anyway, I did a manual backup by removing the sd card from the pi, and loading it onto my laptop. This did the trick but costs more time than backing up over SSH. 
+To perform the backup anyway, I did a manual backup by removing the sd card from the pi, and loading it onto my laptop. This did the trick but costs more time than backing up over SSH. The backup's size was about 250mb for all files.
 ## Assignment 14: *Compile a simple C program on your Pi and your laptop and run it*
 I compiled the program using `gcc HelloWorld.c`. This created an output file `a.out`. Looking at this output using `./a.out` gave the desired Hello World to appear on screen.
 ## Assignment 15: *Get familiar with C*
@@ -125,7 +125,7 @@ The `free(*ptr)` keyword will free up the allocated memory at the reference that
 
 
 The stack has a FiFo structure. If a function needs memory, a block is placed on top of the stack. If the function has completed running, the block can be popped of the stack to free up the memory. The heap has a dynamic structure. Here, a block of memory is allocated to the function but not necessarily in order with the other functions. This makes it a more efficient storing, but also increases the change of a memory leak.
-## **REVIEW** Assignment 19: *Stack layout*
+## Assignment 19: *Stack layout*
 The stack looks as follows:
 ```
 Stack:
@@ -151,6 +151,8 @@ There are three functions being called in this program. Each function adds a num
 | foo              | e, f, g, h, p          |
 
 The stack memory dump is created by the `bar` function.
+
+The size of the stack is all these arguments + the stack dump combined. This was about 
 ## Assignment 20: *BenchMem*
 The following graph was made:
 ![](../../../.images/Timings.jpg)
