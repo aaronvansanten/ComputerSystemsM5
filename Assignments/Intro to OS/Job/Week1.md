@@ -114,7 +114,46 @@ The first memory address is the address of the program itself. The second is the
 
 `malloc` is used to allocate memory for a program where the program can store its data. This then needs to be freed using `free` after it is no longer used. Otherwise this memory address will only be available once the program exits, which could lead to memory leaks and instability if not controlled. `alloca` allocates memory but automatically frees it once the function that called `alloca()` returns to its caller.
 
-## **TODO** Assignment 19: *Stack layout*
+## Assignment 19: *Stack layout*
+
+`./StackLayout` has the following output:
+
+```
+Stack:
+0x7fd43d659c:argc
+0x7fd43d6590:argv
+0x7fd43d6588:envp
+0x7fd43d65ac:a
+0x7fd43d65a8:b
+0x7fd43d6568:c
+0x7fd43d6560:d
+0x7fd43d653c:e
+0x7fd43d6538:f
+0x7fd43d654c:g
+0x7fd43d6548:h
+0x7fd43d6540:p
+```
+
+This program has three functions, `main`, `foo`, and `bar` with each function adding variables to the stack. `argc`, `argv`, and `envp` are variables belonging to `main`, and `a` and `b` are also created there in the code.
+
+From `main`, `foo` is called with parameters `c` and `d` which is added to the stack. `foo` then calls `bar` with `e` and `f`. `bar` also adds `g` and `h` to the stack. Lastly, `bar` also creates the variable `p` which is also added on the stack. However, minding the order of the memory order of the stack it should rather be printed as:
+
+```
+0x7fd43d65ac:a
+0x7fd43d65a8:b
+0x7fd43d659c:argc
+0x7fd43d6590:argv
+0x7fd43d6588:envp
+0x7fd43d6568:c
+0x7fd43d6560:d
+0x7fd43d654c:g
+0x7fd43d6548:h
+0x7fd43d6540:p
+0x7fd43d653c:e
+0x7fd43d6538:f
+```
+
+Which also makes sense once one looks at the code as this is the order in which the variables are used. `argc`, `argv`, and `envp` are never defined or called until after `a` and `b` are initialized and therefore don't appear on the stack until then.
 
 ## Assignment 20: *BenchMem*
 
@@ -133,14 +172,60 @@ It seems that the time necessary to allocate a certain size of memory increases 
 
 `strace` does not trace the child process by default. `clone()` is the system call for creating the child process. By using `fork -f ./Fork` one can trace the system calls of the child process as well under its new pid.
 
-## **TODO** Assignment 22: *Fork and strace*
+## Assignment 22: *Fork and strace*
 
 I could not make the child process appear in `htop`. I have tried adding a `sleep(5);` to the Fork program, sorting and filtering within `htop` for the correct pid, spamming the program and more.
 
-## **TODO** Assignment 23: *Using gdb*
+By adding a `sleep(5)` to the code I was able to make the thread appear in `htop`. I also added a filter in `htop` for 'Fork'. See the following screenshot:
 
+![](../../../.images/PID%20Job.png)
 
+## Assignment 23: *Using gdb*
 
-## **TODO** Assignment 24: *File permissions*
+The provided commands yield the following output:
 
-## **TODO** Assignment 25: *Heap vs. stack (difficult)*
+```
+Reading symbols from ./numberOfArguments...
+(gdb) disassemble add
+Dump of assembler code for function add:
+   0x0000000000000804 <+0>:	sub	sp, sp, #0x10
+   0x0000000000000808 <+4>:	str	x0, [sp, #8]
+   0x000000000000080c <+8>:	str	w1, [sp, #4]
+   0x0000000000000810 <+12>:	ldr	x0, [sp, #8]
+   0x0000000000000814 <+16>:	ldr	w1, [x0]
+   0x0000000000000818 <+20>:	ldr	w0, [sp, #4]
+   0x000000000000081c <+24>:	add	w0, w1, w0
+   0x0000000000000820 <+28>:	add	sp, sp, #0x10
+   0x0000000000000824 <+32>:	ret
+End of assembler dump.
+```
+
+`sub sp, sp, #0x10`: subtracts decimal 16 from the sp register.
+
+`str x0, [sp, #8]`: stores sp with byte offset 8 in x0.
+
+`str w1, [sp, #4]`: stores sp with byte offset 4 in w1.
+
+`ldr x0, [sp, #8]`: loads sp with byte offset 8 to x0.
+
+`ldr w1, [x0]`: loads x0 to w1.
+
+`ldr w0, [sp, #4]`: loads sp with byte offset 4 to w0.
+
+`add w0, w1, w0`: adds w1 and w0 into w0.
+
+`add sp, sp, #0x10`: adds decimal 16 to sp.
+
+`ret`: returns from the subroutine.
+
+## Assignment 24: *File permissions*
+
+By using `ls -l | grep <filename>` I can easily check the permissions. `/etc/passwd` can only be written by root, other users can read. `/etc/shadow` can be written and read by root, but cannot even be viewed by non-root users.
+
+For `~/.bashrc` I needed to add the `-a` tag to `ls` to view hidden files. This revealed that only the owner of the file (`pi` in my case) can write to this file, other users can only read.
+
+To conclude, `/etc/passwd` and `/etc/shadow` require the use of `sudo`, while `~/.bashrc` does not.
+
+## Assignment 25: *Heap vs. stack (difficult)*
+
+The heap requires more instructions to store and retrieve data. This conceptually makes sense as the process needs to take more into account. The stack simply requires the location of the top, and nothing more. However, once a variable needs to be retrieved from a place that is not the top of the stack this could prove more difficult. How much slower this is depends on the program and in what way it uses the heap and/or stack. If memory access is limited and does not require access to items deep in the stack, I believe the stack to be faster. In situations with lots of memory access in deep locations, I believe the heap to be faster.
