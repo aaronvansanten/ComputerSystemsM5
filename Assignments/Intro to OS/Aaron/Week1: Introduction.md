@@ -45,12 +45,13 @@ Examples of when sudo are needed are the following:
 - Viewing system logs using `-g adm more /var/log/syslog`
 ## Assignment 9: *Update the software on the Raspberry Pi*
 To install all the additions, I used the command `sudo apt install` on all the packages. Afterwards, I used `sudo apt full-upgrade`. Compared to the usual, `sudo apt upgrade`, this command also updates any dependencies that the packages need.
-## Assignment** 10: *LEDs*
+## Assignment 10: *LEDs*
 The two leds are both labeled:
 - PWR: This led indicates if there is a power connection to the raspberry pi
 - ACT: This led indicates if the SD card is active on the raspberry pi
+  
 ## Assignment 11: *Prepare to copy files from your computer to the Pi and vice versa*
-To copy the the zip file to the home directory, I used the command `scp intro-files-2022.zip AaronPi@blueberry.local:introfiles `. This copied the zip file into the `~` directory of the raspberry pi under the name 'home'. This was followed by the command `unzip introfiles`. This unzipped the file package and stored it as a directory called 'intro-files'. This directory contained the same C files as the zipped folder.
+To copy the the zip file to the home directory, I used the command `scp intro-files-2022.zip AaronPi@blueberry.local:introfiles `. This copied the zip file into the `~` directory of the raspberry pi under the name 'introfiles'. This was followed by the command `unzip introfiles`. This unzipped the file package and stored it as a directory called 'intro-files'. This directory contained the same C files as the zipped folder.
 ## Assignment 12: *Find a convenient way for you to edit files on the Pi*
 As VsCode is my main editor, I have chosen to connect to the Pi with VsCode. This went really smoothly and I can access all files correctly. To simply view the code on the raspberry pi, `cat <file>` is my preferred way to view the program. To quickly edit a program, such as editing a single line, I am using `nano <file>`.
 ## Assignment 13: *Backup*
@@ -152,7 +153,6 @@ There are three functions being called in this program. Each function adds a num
 
 The stack memory dump is created by the `bar` function.
 
-The size of the stack is all these arguments + the stack dump combined. This was about 
 ## Assignment 20: *BenchMem*
 The following graph was made:
 ![](../../../.images/Timings.jpg)
