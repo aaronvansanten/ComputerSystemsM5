@@ -421,13 +421,53 @@ The main system call responsible for the semaphore is `futex()`. This system cal
 
 ## Assignment 15: *Spinlock*
 
-`Spinlock` defines a lock on a variable and until the lock is set to `0` the `for` loop keeps counting up `i`. With the `-dyield` option set, the program will yield the CPU for a cycle, freeing up resources. By doing that it also counts less often as can be seen in the results. Without `dyield` it counts to somewhere in the range of `98512046`, and with `-dyield` it only reaches `320866`.
+`Spinlock` defines a lock on a variable and until the lock is set to `0` the `for` loop keeps counting up `i`. With the `-dyield` option set, the program will yield the CPU for a cycle, freeing up resources. By doing that it also counts less often as can be seen in the results. Without `dyield` it counts to somewhere in the range of `98512046`, and with `-dyield` it only reaches `320866`. This is basically a kind of semaphore.
 
 ## Assignment 16: *Spinlock with processes (difficult)*
 
+Unfortunately I did not manage to achieve this. The code I had is as follows:
 
+```C
+/*  Spinlock.c - Demonstrate the compare-and-swap instruction by releasing
+    a lock after 1 second. */
 
-## Assignment 18: *ProdCons*
+#include <stdio.h>
+#include <unistd.h>
+#include <pthread.h>
+#include <stdlib.h>
+
+int Lock = 1;
+
+void *tproc(void *ptr) {
+    sleep(1);
+    Lock = 0;
+    printf("thread lock addr.: %p\n",&Lock);
+    exit(0);
+}
+
+int main(int argc, char * argv[]) {
+    int i;
+    if (fork() == 0) { // if this is child process:
+        tproc(NULL);
+    } else { // if still in the parent process:
+        printf("1 Lock addr.: %p\n",&Lock);
+        for(i=0; !__sync_bool_compare_and_swap(&Lock, 0, 2); i++) {
+            sched_yield();
+        }
+        printf("Lock addr.: %p\n",&Lock);
+        printf("Waited loops: %d\n",i);
+        return 0;
+    }
+}
+
+/*  Please note that the checks on the return value of the system calls
+    have been omitted to avoid cluttering the code. However, system calls
+    can and will fail, in which case the results are unpredictable. */
+```
+
+I believe the solution to be the creation of shared memory in which the lock resides. However, I did not have time to implement this as this is not a small task.
+
+## Assignment 17: *ProdCons*
 
 The output is as follows:
 
@@ -483,7 +523,7 @@ i=9 9=B[1]
 
 With a lower `N` the threads are more synchronized.
 
-## Assignment 19: *ProdCons initialisation*
+## Assignment 18: *ProdCons initialisation*
 
 Sample output (it is quite random):
 
@@ -534,7 +574,7 @@ Aborted
 
 Where it can clearly be seen that `i` is not `k`.
 
-## Assignment 20: *ProdManyCons*
+## Assignment 19: *ProdManyCons*
 
 Without the `-x` the program fails most of the time with:
 
@@ -545,27 +585,264 @@ Aborted
 
 With this program there are many consumers who all try to access the buffer at the same time. By passing `-x` to the program it enables semaphores and thereby protects the resource from corruption.
 
-## Assignment 21: *ProdCons sem_wait Spaces*
+## Assignment 20: *ProdCons sem_wait Spaces*
 
+After commenting out the specified line we get the following output:
 
+```
+pi@pi-logmans:~/week2/files $ ./ProdCons.exe 
+    B[0]=0
+    B[1]=1
+    B[2]=2
+    B[3]=3
+    B[0]=4
+    B[1]=5
+    B[2]=6
+    B[3]=7
+    B[0]=8
+    B[1]=9
+i=0 0=B[0]
+i=1 9=B[1]
+ProdCons.exe: ProdCons.c:36: tcons: Assertion `i==k' failed.
+Aborted
+```
 
-## Assignment 22: *ProdCons sem_wait Elements*
+It is not very consistent, but the idea is generally the same.
 
+Because the `sem_wait()` is removed the semaphore is no longer locked and the consumer and producer simultaneously work with the buffer and `i==k` fails.
+
+## Assignment 21: *ProdCons sem_wait Elements*
+
+With the specified modification the program fails earlier. They are usually along the lines of:
+
+```
+pi@pi-logmans:~/week2/files $ ./ProdCons.exe 
+    B[0]=0
+i=0 0=B[0]
+i=1 0=B[1]
+    B[1]=1
+    B[2]=2
+ProdCons.exe: ProdCons.c:36: tcons: Assertion `i==k' failed.
+Aborted
+```
+
+With this modification the consumer is never stopped and therefore consumes at the same time as the producer produces. Therefore the assertion `i==k` fails.
 
 # Memory
 
-## Assignment 23: *ProcessLayout*
+## Assignment 22: *ProcessLayout*
 
+```
+pi@pi-logmans:~/week2/files $ gcc ProcessLayout.c -o ProcessLayout -lpthread
+pi@pi-logmans:~/week2/files $ ./ProcessLayout 
+pid=1534, tid=0x7fb8899040
+sbrk 0x559e2e9000
+tid=0x7fb86b61c0 stack=0x7fb86b5998
+sbrk 0x559e3e9000
+tid=0x7fb7eb51c0 stack=0x7fb7eb4998
+sbrk 0x559e4e9000
+tid=0x7fb76b41c0 stack=0x7fb76b3998
+1534:   ./ProcessLayout
+Address           Kbytes     RSS   Dirty Mode  Mapping
+0000005588a90000       4       4       4 r-x-- ProcessLayout
+0000005588aa1000       4       4       4 r---- ProcessLayout
+0000005588aa2000       4       4       4 rw--- ProcessLayout
+000000559e2c8000    3204       4       4 rw---   [ anon ]
+0000007fb6eb4000       4       0       0 -----   [ anon ]
+0000007fb6eb5000    8192       8       8 rw---   [ anon ]
+0000007fb76b5000       4       0       0 -----   [ anon ]
+0000007fb76b6000    8192       8       8 rw---   [ anon ]
+0000007fb7eb6000       4       0       0 -----   [ anon ]
+0000007fb7eb7000    8192       8       8 rw---   [ anon ]
+0000007fb86b7000    1396     932       0 r-x-- libc-2.31.so
+0000007fb8814000      60       0       0 ----- libc-2.31.so
+0000007fb8823000      16      16      16 r---- libc-2.31.so
+0000007fb8827000       8       8       8 rw--- libc-2.31.so
+0000007fb8829000      12      12      12 rw---   [ anon ]
+0000007fb882c000     112     112       0 r-x-- libpthread-2.31.so
+0000007fb8848000      60       0       0 ----- libpthread-2.31.so
+0000007fb8857000       4       4       4 r---- libpthread-2.31.so
+0000007fb8858000       4       4       4 rw--- libpthread-2.31.so
+0000007fb8859000      16       4       4 rw---   [ anon ]
+0000007fb886f000     136     132       0 r-x-- ld-2.31.so
+0000007fb8899000      16       8       8 rw---   [ anon ]
+0000007fb889d000       8       0       0 r----   [ anon ]
+0000007fb889f000       4       4       0 r-x--   [ anon ]
+0000007fb88a0000       4       4       4 r---- ld-2.31.so
+0000007fb88a1000       8       8       8 rw--- ld-2.31.so
+0000007ff9943000     132      12      12 rw---   [ stack ]
+---------------- ------- ------- ------- 
+total kB           29800    1300     120
+```
+
+Then with `N` changed to 2:
+
+```
+pi@pi-logmans:~/week2/files $ ./ProcessLayout 
+pid=1556, tid=0x7fb282b040
+sbrk 0x5578fde000
+tid=0x7fb26481c0 stack=0x7fb2647998
+sbrk 0x55790de000
+tid=0x7fb1e471c0 stack=0x7fb1e46998
+1556:   ./ProcessLayout
+Address           Kbytes     RSS   Dirty Mode  Mapping
+0000005576d60000       4       4       4 r-x-- ProcessLayout
+0000005576d71000       4       4       4 r---- ProcessLayout
+0000005576d72000       4       4       4 rw--- ProcessLayout
+0000005578fbd000    2180       4       4 rw---   [ anon ]
+0000007fb1647000       4       0       0 -----   [ anon ]
+0000007fb1648000    8192       8       8 rw---   [ anon ]
+0000007fb1e48000       4       0       0 -----   [ anon ]
+0000007fb1e49000    8192       8       8 rw---   [ anon ]
+0000007fb2649000    1396     924       0 r-x-- libc-2.31.so
+0000007fb27a6000      60       0       0 ----- libc-2.31.so
+0000007fb27b5000      16      16      16 r---- libc-2.31.so
+0000007fb27b9000       8       8       8 rw--- libc-2.31.so
+0000007fb27bb000      12      12      12 rw---   [ anon ]
+0000007fb27be000     112     112       0 r-x-- libpthread-2.31.so
+0000007fb27da000      60       0       0 ----- libpthread-2.31.so
+0000007fb27e9000       4       4       4 r---- libpthread-2.31.so
+0000007fb27ea000       4       4       4 rw--- libpthread-2.31.so
+0000007fb27eb000      16       4       4 rw---   [ anon ]
+0000007fb2801000     136     124       0 r-x-- ld-2.31.so
+0000007fb282b000      16       8       8 rw---   [ anon ]
+0000007fb282f000       8       0       0 r----   [ anon ]
+0000007fb2831000       4       4       0 r-x--   [ anon ]
+0000007fb2832000       4       4       4 r---- ld-2.31.so
+0000007fb2833000       8       8       8 rw--- ld-2.31.so
+0000007fe87ff000     132      12      12 rw---   [ stack ]
+---------------- ------- ------- ------- 
+total kB           20580    1276     112
+```
+
+
+With `N=2` only one thread is created and therefore two lines are missing as compared to `N=3`. It can be seen that most of the memory is shared. There are a couple differences, that being the following lines:
+
+```
+sbrk 0x559e4e9000
+tid=0x7fb76b41c0 stack=0x7fb76b3998
+0000007fb7eb6000       4       0       0 -----   [ anon ]
+0000007fb7eb7000    8192       8       8 rw---   [ anon ]
+```
 
 # Virtual Memory
 
-## Assignment 24: *Getrusage*
+## Assignment 23: *Getrusage*
 
+After compilation and running with and without `x` the output is as follows:
 
+```
+pi@pi-logmans:~/week2/files $ ./Getrusage 
+cnt=       0, flt=107
+cnt=      f8, flt=108
+cnt=    10f8, flt=109
+cnt=    20f8, flt=110
+cnt=    30f8, flt=111
+cnt=    40f8, flt=112
+cnt=    50f8, flt=113
+Lock=off
 
-## Assignment 25: *Getrusage direct*
+pi@pi-logmans:~/week2/files $ ./Getrusage x
+cnt=       0, flt=112
+Lock=on
+```
 
-## Assignment 26: *Mmap*
+With the lock enabled, the memory is blocked from being moved into the swap file/partition. This program measures the number of soft page faults/reclaims with the `usage.ru_minflt` variable. It will then print the number of times an address was accessed from swap.
 
+With the lock enabled no swap is ever used as the memory is locked in RAM.
 
-## Assignment 27: *Mmap with argument*
+## Assignment 24: *Getrusage direct*
+
+```
+pi@pi-logmans:~/week2/files $ gcc Getrusage.c -o Getrusage -DDIRECT
+pi@pi-logmans:~/week2/files $ ./Getrusage
+cnt=     d98, flt=105
+cnt=     d99, flt=113
+cnt=    1d98, flt=114
+cnt=    2d98, flt=115
+cnt=    3d98, flt=116
+cnt=    4d98, flt=117
+Lock=off
+pi@pi-logmans:~/week2/files $ nano Getrusage.c 
+pi@pi-logmans:~/week2/files $ ./Getrusage
+cnt=     3b8, flt=107
+cnt=     3b9, flt=115
+cnt=    13b8, flt=116
+cnt=    23b8, flt=117
+cnt=    33b8, flt=118
+cnt=    43b8, flt=119
+cnt=    53b8, flt=120
+Lock=off
+pi@pi-logmans:~/week2/files $ ./Getrusage
+cnt=     238, flt=107
+cnt=     239, flt=113
+cnt=    1238, flt=114
+cnt=    2238, flt=115
+cnt=    3238, flt=116
+cnt=    4238, flt=117
+cnt=    5238, flt=118
+Lock=off
+```
+
+I do not observe a difference. Could it be that the compiler already compiled with the `-DDIRECT` flag even though I did not specify it?
+
+## Assignment 25: *Mmap*
+
+The command generated the following output:
+
+```
+pi@pi-logmans:~/week2/files $ ./Mmap Mmap.c foo
+1960:   ./Mmap Mmap.c foo
+Address           Kbytes     RSS   Dirty Mode  Mapping
+0000005588b70000       4       4       4 r-x-- Mmap
+0000005588b81000       4       4       4 r---- Mmap
+0000005588b82000       4       4       4 rw--- Mmap
+0000007fa066f000    1396     964       0 r-x-- libc-2.31.so
+0000007fa07cc000      60       0       0 ----- libc-2.31.so
+0000007fa07db000      16      16      16 r---- libc-2.31.so
+0000007fa07df000       8       8       8 rw--- libc-2.31.so
+0000007fa07e1000      12      12      12 rw---   [ anon ]
+0000007fa07f6000     136     136       0 r-x-- ld-2.31.so
+0000007fa0820000       4       4       4 -w-s- foo
+0000007fa0821000       4       4       0 r---- Mmap.c
+0000007fa0822000       8       8       8 rw---   [ anon ]
+0000007fa0824000       8       0       0 r----   [ anon ]
+0000007fa0826000       4       4       0 r-x--   [ anon ]
+0000007fa0827000       4       4       4 r---- ld-2.31.so
+0000007fa0828000       8       8       8 rw--- ld-2.31.so
+0000007fdeb7c000     132      12      12 rw---   [ stack ]
+---------------- ------- ------- ------- 
+total kB            1812    1192      84
+```
+
+First the file is loaded into memory and then copied using `memcpy`. This is done with the `MAP_SHARED` flag which makes all changes to the mapping visible to other processes. With `cat foo` the file (which is nothing more than a mapping to a memory address) can be output.
+
+## Assignment 26: *Mmap with argument*
+
+```
+pi@pi-logmans:~/week2/files $ ./Mmap Mmap.c bar x
+1500:   ./Mmap Mmap.c bar x
+Address           Kbytes     RSS   Dirty Mode  Mapping
+00000055596c0000       4       4       0 r-x-- Mmap
+00000055596d1000       4       4       4 r---- Mmap
+00000055596d2000       4       4       4 rw--- Mmap
+0000007f8d02b000    1396     980       0 r-x-- libc-2.31.so
+0000007f8d188000      60       0       0 ----- libc-2.31.so
+0000007f8d197000      16      16      16 r---- libc-2.31.so
+0000007f8d19b000       8       8       8 rw--- libc-2.31.so
+0000007f8d19d000      12      12      12 rw---   [ anon ]
+0000007f8d1b2000     136     120       0 r-x-- ld-2.31.so
+0000007f8d1dc000       4       4       4 -w--- bar
+0000007f8d1dd000       4       4       0 r---- Mmap.c
+0000007f8d1de000       8       8       8 rw---   [ anon ]
+0000007f8d1e0000       8       0       0 r----   [ anon ]
+0000007f8d1e2000       4       4       0 r-x--   [ anon ]
+0000007f8d1e3000       4       4       4 r---- ld-2.31.so
+0000007f8d1e4000       8       8       8 rw--- ld-2.31.so
+0000007fc3c4b000     132      12      12 rw---   [ stack ]
+---------------- ------- ------- ------- 
+total kB            1812    1192      80
+pi@pi-logmans:~/week2/files $ cat bar
+```
+
+With the extra argument the process uses the flag `MAP_PRIVATE` and this does not allow other processes to see the changes to the mapping. Therefore `cat bar` returns nothing as the `cat` process cannot see anything.
