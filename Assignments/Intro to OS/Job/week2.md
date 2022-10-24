@@ -1,4 +1,4 @@
-# Fork, Signal and IPC
+-# Fork, Signal and IPC
 
 ## Assignment 1: *Understanding Processes*
 

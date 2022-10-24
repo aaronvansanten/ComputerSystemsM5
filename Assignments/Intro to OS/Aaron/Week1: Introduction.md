@@ -6,7 +6,7 @@ The kit is complete. Next to this kit, I bought nothing. I already had the recom
 - A connection to an ethernet cable
 - An SD reader
 ## Assignment 3: *Install a Linux environment on your Laptop computer as well*
-My main laptop is running MacOS. This means that only homebrew needed to be installed. This was done by the command:
+My main laptop is running MacOS. This mean˚s that only homebrew needed to be installed. This was done by the command:
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```

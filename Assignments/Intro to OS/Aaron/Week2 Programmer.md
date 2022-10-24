@@ -157,7 +157,7 @@ The first few lines set a number of important items, such as the thread ID and t
 Setting different `N` for the program, I concluded that the maximum numbers of threads that can run on the pi is 9084.
 
 
-## **REVIEW** Assignment 8: *MyThread Timing*
+## Assignment 8: *MyThread Timing*
 Comparing the timing for 50 thread gives the following table:
 | Timing | Java   | C      | Difference |
 | ------ | ------ | ------ | ---------- |
@@ -166,7 +166,7 @@ Comparing the timing for 50 thread gives the following table:
 | Sys    | 0,179s | 0,028s | 0,151s     |
 
 
-It is notable that C is faster than java on all points. From my understanding, this is because compiling C into machine code is way faster than doing the equivalent of java.e
+Some [research](https://careerkarma.com/blog/java-vs-c/) taught me that there are a number of differences between both languages. C is a low-level language whereas Java is a high level language. Therefore, C is closer to the machine code whereas Java is further away. Next to that, Java is a semi-interpreted language whereas C is a compiled language. This means that C, as a compiled language, gets translated to machine code and optimized before execution, making it super fast. Java, as an interpreted language, does not work in the same way. It does not have to compile to machine code, and can be executed almost immediately. However, since it lacks this compilation, it is much slower than a compiled language.
 
 ## Assignment 9: *Power of Threads*
 The idea that I had to multithread this program was to create a thread for all elements that need to be summed, and let them do that operation and add it to a central number.
@@ -260,25 +260,26 @@ These two output shows that, once a thread secures the semaphore, it does not lo
 
 The ctr of both outputs is always 0 and is therefore constant regardless of intermediate steps.
 
-## **CONTINUE** Assignment 13: *Count in C and Java*
+## Assignment 13: *Count in C and Java*
 The results are not the same for both programs. For java, it is the same as the previous assignment. The C program is a bit less constant. It still happens more consistent than without the semaphore, however, it also occurs that one function is called 8 times, than the other function takes over, and than the initial function ends.
 
 Some further investigation leaded me to teh fact that java has a more secure sephamore than C. In Java, it locks the object in a more secure way whereas C protects is a bit less. This allows other threads to interfere, but it speeds up the program massively.
 
 
-## **TODO** Assignment 14: *Count and strace*
-
+## Assignment 14: *Count and strace*
+Based on the output of the program, `futex()` is responsible for implementing the sephamore. It is called after every write to the sephamore to check if writing is allowed. If not, the `sched_yield()` function forces the processor to yield until it can be written to.
 
 
 ## Assignment 15: *Spinlock*
 The `scheld_yield()` ensures that the thread yields and does not join the rest of the threads. Therefore, the output is a lot lower when this is activated. When it is activated, the output is `326236`. If not, the output is `98700581`. Since the threads yield within the second and not join the rest, the counter is a lot lower when it is used in the program.
 
 
-## **TODO** Assignment 16: *Spinlock with processes (difficult)*
+## Assignment 16: *Spinlock with processes (difficult)*
+The only thing I can think of is the fact that threads directly share a part of memory, whereas different processes do not. This means that, for processes, spin locking is easier since the writing to shared memory takes longer. That means that the processes takes a lot more cycles than when using threads.
 
 
 
-## Assignment 18: *ProdCons*
+## Assignment 17: *ProdCons*
 Both programs do the same. The output looks the following:
 ``` s
 N = 1       | N = 4
