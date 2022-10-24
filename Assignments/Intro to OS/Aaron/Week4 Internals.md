@@ -1,97 +1,105 @@
-## Assignment 1: **
+# System Calls
 
+## Assignment 1: *Echo*
 
 
-## Assignment 2: **
 
+# Scheduling
 
+## Assignment 2: *Loop*
 
-## Assignment 3: **
 
 
+## Assignment 3: *SchedXY*
 
-## Assignment 4: **
 
 
+## Assignment 4: *Nice*
 
-## Assignment 5: **
 
 
+# I/O
 
-## Assignment 6: **
+## Assignment 5: *wiringpi*
 
 
 
-## Assignment 7: **
+## Assignment 6: *GPIO*
 
 
 
-## Assignment 8: **
+## Assignment 7: *Light dependent resistor*
 
 
 
-## Assignment 9: **
+## Assignment 8: *Blink*
 
 
 
-## Assignment 10: **
+## Assignment 9: *Sparse*
 
 
 
-## Assignment 11: **
+## Assignment 10: *Fadvise*
 
 
 
-## Assignment 12: **
+## Assignment 11: *ln.sh*
 
 
 
-## Assignment 13: **
+## Assignment 12: *Pipe.c*
 
 
 
-## Assignment 14: **
+## Assignment 13: *Fifo.c*
 
 
 
-## Assignment 15: **
+## Assignment 14: *Readdir.c*
 
 
 
-## Assignment 16: **
+## Assignment 15: *fdisk*
 
 
 
-## Assignment 18: **
+## Assignment 16: *Filesystems on the pi*
 
 
 
-## Assignment 18: **
+## Assignment 18: *Mount.c*
 
 
 
-## Assignment 19: **
+## Assignment 18: *Unplug*
 
 
 
-## Assignment 20: **
+## Assignment 19: *Fadvise*
 
 
 
-## Assignment 21: **
+## Assignment 20: *Ext4*
 
 
 
-## Assignment 22: **
+## Assignment 21: *Ext4 read and write*
 
 
 
-## Assignment 23: **
+## Assignment 22: *Backup ext4*
 
 
 
-## Assignment 24: **
+## Assignment 23: *Unsafe removal*
 
 
 
-## Assignment 25: **
+## Assignment 24: *tail -f*
+
+
+
+# Kernel
+
+## Assignment 25: *lsmod*
