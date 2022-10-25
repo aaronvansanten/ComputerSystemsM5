@@ -75,11 +75,36 @@ The GDPR principles relating to the processing of personal data is the following
 - Storage limitation
 - Integrity and confidentiality ▪ Accountability
 
+# Provided Legislation
 
+## Directive 2009/24/EC
 
+> (7) For the purpose of this Directive, the term ‘computer program’ shall include programs in any form, including those which are incorporated into hardware. This term also includes preparatory design work leading to the development of a computer program provided that the nature of the preparatory work is such that a computer program can result from it at a later stage.
 
+> (8) In respect of the criteria to be applied in determining whether or not a computer program is an original work, no tests as to the qualitative or aesthetic merits of the program should be applied.
 
+> (11) For the avoidance of doubt, it has to be made clear that only the expression of a computer program is protected and that ideas and principles which underlie any element of a program, including those which underlie its interfaces, are not protected by copyright under this Directive. (...)
 
+Underlying logic and such things can be covered by national law.
+
+> (13) The exclusive rights of the author to prevent the unauthorised reproduction of his work should be subject to a limited exception in the case of a computer program to allow the reproduction technically necessary for the use of that program by the lawful acquirer. This means that the acts of loading and running necessary for the use of a copy of a program which has been lawfully acquired, and the act of 
+correction of its errors, may not be prohibited by contract. (...)
+
+> (14) A person having a right to use a computer program should not be prevented from performing acts necessary to observe, study or test the functioning of the program, provided that those acts do not infringe the copyright in the program. 
+
+> (15) The unauthorised reproduction, translation, adaptation or transformation of the form of the code in which a copy of a computer program has been made available constitutes an infringement of the exclusive rights of the author. (... _exceptions_)
+
+### Actual directive:
+
+> (7.1) Without prejudice to the provisions of Articles 4, 5 and 6, Member States shall provide, in accordance with their national legislation, appropriate remedies against a person committing any of the following acts: 
+> 
+> (a) any act of putting into circulation a copy of a computer program knowing, or having reason to believe, that it is an infringing copy;
+>
+>(b) the possession, for commercial purposes, of a copy of a computer program knowing, or having reason to believe, that it is an infringing copy;
+>
+> (c) any act of putting into circulation, or the possession for commercial purposes of, any means the sole intended purpose of which is to facilitate the unauthorised removal or circumvention of any echnical device which may have been applied to protect a computer program. 
+
+## Directive 96/9/EC on the legal protection of databases
 
 
 
