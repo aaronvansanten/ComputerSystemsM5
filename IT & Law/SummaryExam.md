@@ -75,33 +75,25 @@ The GDPR principles relating to the processing of personal data is the following
 - Storage limitation
 - Integrity and confidentiality ▪ Accountability
 
-# Lecture 4
-Computer crime has three defined types:
-1. Computer as motive for criminal behavior
-2. Computer as instrument for criminal behavior
-3. Computer as target of criminal behavior
-
-A combination is also possible between these motives.
-
-The european directive 2013/40/EU defines two types of laws regarding cyber crime:
-| Substantive Law                                     | Procedural Law                                             |
-| --------------------------------------------------- | ---------------------------------------------------------- |
-| illegal access to information systems               | Penalties for natural persons / Liability of legal persons |
-| illegal system interference                         | Jurisdiction and international cooperation                 |
-| illegal data interference                           |                                                            |
-| illegal interception                                |                                                            |
-| illegal tools                                       |                                                            |
-| illegal incitement, aiding and abetting and attempt |                                                            |
-
-
-**Substantive Law** relates to prohibited acts. Offenses and penalties fall under this type of law.
-
-**Procedural Law** relates to lawfully accessing another computer. Investigation of data in computers or order to give a computer fall under this law.
-
-
-The liability regime state the following:
->“Any person who, through negligence, causes data stored, processed or transferred by means of a computerised device or system to be altered, erased, rendered unusable or disabled, or causes other data to be added thereto, shall, if this causes serious damage to that data, be liable to a term of imprisonment or of detention not exceeding one month or a fine of the second category” (Section 350b sub 1 Sr)
 
 
 
+
+
+
+
+
+
+> (43) In order to ensure that consent is freely given, consent should not provide a valid legal ground for the processing of personal data in a specific case where there is a clear imbalance between the data subject and the controller, in particular where the controller is a public authority and it is therefore unlikely that consent was freely given in all the circumstances of that specific situation. Consent is presumed not to be freely given if it does not allow separate consent to be given to different personal data processing operations despite it being appropriate in the individual case, or if the performance of a contract, including the provision of a service, is dependent on the consent despite such consent not being necessary for such performance.
+
+
+
+> (51) Personal data which are, by their nature, particularly sensitive in relation to fundamental rights and freedoms merit specific protection as the context of their processing could create significant risks to the fundamental rights and freedoms. Those personal data should include personal data revealing racial or ethnic origin, (...). The processing of photographs should not systemati­cally be considered to be processing of special categories of personal data as they are covered by the definition of biometric data only when processed through a specific technical means allowing the unique identification or authentication of a natural person.
+
+
+> (54) The processing of special categories of personal data may be necessary for reasons of public interest in the areas of public health without consent of the data subject. Such processing should be subject to suitable and specific measures so as to protect the rights and freedoms of natural persons. In that context, ‘public health’ should be interpreted as defined in Regulation (EC) No 1338/2008 of the European Parliament and of the Council (1), namely all elements related to health, namely health status, including morbidity and disability, the determinants having an effect on that health status, health care needs, resources allocated to health care, the provision of, and universal access to, health care as well as health care expenditure and financing, and the causes of mortality. Such processing of data concerning health for reasons of public interest should not result in personal data being processed for other purposes by third parties such as employers or insurance and banking companies.
+
+_I have given up_
+
+## Directive 2013/40/EU on attacks against information systems
 
