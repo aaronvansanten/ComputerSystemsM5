@@ -27,3 +27,5 @@ cd john/src
 cd ..
 sudo ./run/john --subsets=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 --length=5 ~/passwd-new.txt
 ```
+
+The process took 21 hours, 39 minutes and 52 seconds on my server (4c/8t, Intel i7 10th mobile) and found the password to be `TCS21`.
