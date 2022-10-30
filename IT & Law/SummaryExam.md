@@ -75,12 +75,32 @@ The GDPR principles relating to the processing of personal data is the following
 - Storage limitation
 - Integrity and confidentiality ▪ Accountability
 
+# Lecture 4
+Computer crime has three defined types:
+1. Computer as motive for criminal behavior
+2. Computer as instrument for criminal behavior
+3. Computer as target of criminal behavior
+
+A combination is also possible between these motives.
+
+The european directive 2013/40/EU defines two types of laws regarding cyber crime:
+| Substantive Law                                     | Procedural Law                                             |
+| --------------------------------------------------- | ---------------------------------------------------------- |
+| illegal access to information systems               | Penalties for natural persons / Liability of legal persons |
+| illegal system interference                         | Jurisdiction and international cooperation                 |
+| illegal data interference                           |                                                            |
+| illegal interception                                |                                                            |
+| illegal tools                                       |                                                            |
+| illegal incitement, aiding and abetting and attempt |                                                            |
 
 
+**Substantive Law** relates to prohibited acts. Offenses and penalties fall under this type of law.
+
+**Procedural Law** relates to lawfully accessing another computer. Investigation of data in computers or order to give a computer fall under this law.
 
 
-
-
+The liability regime state the following:
+>“Any person who, through negligence, causes data stored, processed or transferred by means of a computerised device or system to be altered, erased, rendered unusable or disabled, or causes other data to be added thereto, shall, if this causes serious damage to that data, be liable to a term of imprisonment or of detention not exceeding one month or a fine of the second category” (Section 350b sub 1 Sr)
 
 
 

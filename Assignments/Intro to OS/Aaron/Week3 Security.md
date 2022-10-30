@@ -47,21 +47,44 @@ I have used the command `find / -perm -4000 2>/dev/null` found on the slides. A 
 
 Counting these results in 22 files that use the `setuid` flag.
 
-## TODO Assignment 3: *setuid on vfat*
-
+## Assignment 3: *setuid on vfat*
+The ubs stick is not part of the system, and is therefore not known with the users of the system. Since the `setuid` flag is based on the users/groups on a system, it will fail on the usb stick since it is merely a device to store files and is not linked to any user. 
 
 
 ## Assignment 4: *Shadow*
 According to some [research](https://www.techtarget.com/searchsecurity/definition/shadow-password-file), the `/etc/shadow` file stores the hashes of the password chosen by users. Exposing this to all users has the huge security risk that these hashes can be stolen by whomever is logged on. With these hashes, the password can be cracked easily. The attacker can either compare the hash to other known hashes or use a brute force attack on his local system. Since this omits the brute force protection (hopefully) setup by the system, the password can be cracked in peace. 
 
 
-##  TODO Assignment 5: *Hash algorithm*
-to figure out the hash, I looked at the manual page of the `crypt` module. This module is responsible for hashing the passwords for storage in the system database.
+## Assignment 5: *Hash algorithm*
+to figure out the hash, I looked at the manual page of the `crypt` module. This module is responsible for hashing the passwords for storage in the system database. I could not find exactly what hash method was used, since it was never mentioned explicitly, however, based on the manual page of `crypt(5)`, my guess is that the Pi uses the YeScript. this guess is based on the fact that this is recommended for newer systems, and that the pi that I am running is using one of the newer 64 bit operating systems. According to the manual page, the CPU time cost per parameter is 1 to 11 (logarithmic).
 
-## CONTINUE Assignment 6: *salts*
+Based on the source code, the hashing algorithm either runs 5 times or 9999999 times.
+``` C
+	/* Enforce sane "rounds" values */
+	if (on(UNIX_ALGO_ROUNDS, ctrl)) {
+		if (on(UNIX_GOST_YESCRYPT_PASS, ctrl) ||
+		    on(UNIX_YESCRYPT_PASS, ctrl)) {
+			if (*rounds < 3 || *rounds > 11)
+				*rounds = 5;
+		} else if (on(UNIX_BLOWFISH_PASS, ctrl)) {
+			if (*rounds < 4 || *rounds > 31)
+				*rounds = 5;
+		} else if (on(UNIX_SHA256_PASS, ctrl) || on(UNIX_SHA512_PASS, ctrl)) {
+			if ((*rounds < 1000) || (*rounds == INT_MAX)) {
+				/* don't care about bogus values */
+				*rounds = 0;
+				unset(UNIX_ALGO_ROUNDS, ctrl);
+			} else if (*rounds >= 10000000) {
+				*rounds = 9999999;
+			}
+		}
+	}
+```
+
+## Assignment 6: *salts*
 According to the manual page of the `crypt` module, salt is a random combination of characters that is added to the hash of a password. This means that even when the phrase is the same, two hashes will never be the same. This improves security massively since this means that a hash cannot be linked to a specific password. By doing this, it prevents that one can compute a ton of hashes once and simply compare a hash with his/her database and figure out the password easily.
 
-*How often does the hash algorithm need to be invoked for salted passwords compared to unsalted passwords using the same hash and iteration count?*
+I could not find anything that explained how often an algorithm needs to be invoked to solve the salted hash.
 
 
 ## Assignment 7: *john*
@@ -72,17 +95,66 @@ pi:12345:1000:1000:,,,:/home/pi:/bin/bash
 ```
 From this output, we read that the password is '12345' since we also know that the password is only 5 digits.
 
-## TODO Assignment 8: *Iteration count*
+## Assignment 8: *Iteration count*
+The iteration count needs to be changed from '1 on 11' to '2 to 11' on the logarithmic scale.
 
 
-
-## TODO Assignment 9: *Jumbo*
-
-
-
-## TODO Assignment 10: *nmap*
+## Assignment 9: *Jumbo*
+I used [this](https://trendoceans.com/how-to-install-john-the-ripper-on-all-platforms/) guide on installing jumbo on my own operating system (MacOs). It also explained how to do this for the linux systems.
 
 
+I ran the command `../run/john --subsets=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789 --length=5 ../../../Download/passwd-new.txt `. The output looks as follows:
+```
+(base) aaron@Aarons-MBP src % ../run/john --subsets=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789 --length=5 ../../../Download/passwd-new.txt
+Warning: detected hash type "sha512crypt", but the string is also recognized as "sha512crypt-opencl"
+Use the "--format=sha512crypt-opencl" option to force loading these as that type instead
+Using default input encoding: UTF-8
+Loaded 1 password hash (sha512crypt, crypt(3) $6$ [SHA512 128/128 ASIMD 2x])
+Cost 1 (iteration count) is 5000 for all loaded hashes
+
+Press 'q' or Ctrl-C to abort, 'h' for help, almost any other key for status
+0g 0:00:00:03 0.00% (5) (ETA: 2022-10-28 06:21) 0g/s 1069p/s   1069c/s  1069C/s     scscc..QeQQQ
+0g 0:00:19:55 0.14% (5) (ETA: 2022-11-03 09:50) 0g/s 996.6p/s  996.6c/s 996.6C/s    eKxex..CyeCy
+0g 0:00:27:36 0.19% (5) (ETA: 2022-11-03 11:23) 0g/s 991.3p/s  991.3c/s 991.3C/s    z2zgz..UAggg
+0g 0:00:36:18 0.26% (5) (ETA: 2022-11-03 08:36) 0g/s 1003p/s   1003c/s  1003C/s     6jq6j..jrrrP
+0g 0:00:52:54 0.36% (5) (ETA: 2022-11-03 23:06) 0g/s 945.6p/s  945.6c/s 945.6C/s    4nn4S..2UUnn
+0g 0:00:52:59 0.36% (5) (ETA: 2022-11-03 23:10) 0g/s 945.4p/s  945.4c/s 945.4C/s    2nUUn..nnnW4
+0g 0:00:57:42 0.38% (5) (ETA: 2022-11-04 02:06) 0g/s 934.6p/s  934.6c/s 934.6C/s    ppAAB..4AA4p
+0g 0:00:58:47 0.39% (5) (ETA: 2022-11-04 02:41) 0g/s 932.4p/s  932.4c/s 932.4C/s    pp1MM..8N8pN
+0g 0:00:58:52 0.39% (5) (ETA: 2022-11-04 02:44) 0g/s 932.2p/s  932.2c/s 932.2C/s    8N8Np..pPVVp
+0g 0:01:01:39 0.41% (5) (ETA: 2022-11-04 04:15) 0g/s 926.6p/s  926.6c/s 926.6C/s    LLq66..NPNNq
+0g 0:01:08:57 0.45% (5) (ETA: 2022-11-04 07:35) 0g/s 914.6p/s  914.6c/s 914.6C/s    t9ttD..Et77E
+0g 0:01:16:17 0.49% (5) (ETA: 2022-11-04 10:29) 0g/s 904.5p/s  904.5c/s 904.5C/s    JJJwV..wKwwY
+0g 0:01:27:04 0.55% (5) (ETA: 2022-11-04 13:53) 0g/s 892.9p/s  892.9c/s 892.9C/s    QCCCK..VCVLL
+0g 0:02:01:57 0.75% (5) (ETA: 2022-11-04 20:57) 0g/s 869.8p/s  869.8c/s 869.8C/s    maadB..amSda
+```
+
+As can be seen, at the moment of writing, the program has not finished. I expected it to take longer, but since the old password took about 1 second, I did not expect this time. I believe that the program will eventually return the correct password. I will show this during the interview.
+
+## Assignment 10: *nmap*
+Looking at the nmap from the raspberry pi, I found that only the ssh-port was open.
+```
+(base) aaron@Aarons-MBP ~ % nmap 10.10.10.218
+Starting Nmap 7.93 ( https://nmap.org ) at 2022-10-24 16:41 CEST
+Nmap scan report for blueberry.iot (10.10.10.218)
+Host is up (0.0050s latency).
+Not shown: 999 closed tcp ports (conn-refused)
+PORT   STATE SERVICE
+22/tcp open  ssh
+
+Nmap done: 1 IP address (1 host up) scanned in 1.20 seconds
+```
+this is not surprising seeing ssh is being used to connect to the pi. Therefore, this ports needs to be open.
+
+When trying to retrieve the header of this port, I get the following:
+```
+(base) aaron@Aarons-MBP ~ % nc 10.10.10.218 22
+SSH-2.0-OpenSSH_8.4p1 Debian-5+deb11u1
+
+Invalid SSH identification string.
+```
+
+This makes sense to me since the ssh is a secure protocol that requires a password. Since this is never provided, it simply will not respond to the request since it is not sure if this can be trusted.
 
 ## Assignment 11: *SSH public key authentication*
 A number of arguments were required to achieve this:
@@ -115,7 +187,44 @@ A hardware token would be close to the ideal protection. It ensures that only yo
 
 # ARM Exploitation
 ## Assignment 14: *ProcessLayout reloaded*
+Looking at the process layout, we see the following:
+```
+Address           Kbytes     RSS   Dirty Mode  Mapping
+0000005555550000       4       4       0 r-x-- ProcessLayout
+0000005555561000       4       4       4 r---- ProcessLayout
+0000005555562000       4       4       4 rw--- ProcessLayout
+0000005555563000    3204       4       4 rw---   [ anon ]
+0000007ff6611000       4       0       0 -----   [ anon ]
+0000007ff6612000    8192       8       8 rw---   [ anon ]
+0000007ff6e12000       4       0       0 -----   [ anon ]
+0000007ff6e13000    8192       8       8 rw---   [ anon ]
+0000007ff7613000       4       0       0 -----   [ anon ]
+0000007ff7614000    8192       8       8 rw---   [ anon ]
+0000007ff7e14000    1396     944       0 r-x-- libc-2.31.so
+0000007ff7f71000      60       0       0 ----- libc-2.31.so
+0000007ff7f80000      16      16      16 r---- libc-2.31.so
+0000007ff7f84000       8       8       8 rw--- libc-2.31.so
+0000007ff7f86000      12      12      12 rw---   [ anon ]
+0000007ff7f89000     112      92       0 r-x-- libpthread-2.31.so
+0000007ff7fa5000      60       0       0 ----- libpthread-2.31.so
+0000007ff7fb4000       4       4       4 r---- libpthread-2.31.so
+0000007ff7fb5000       4       4       4 rw--- libpthread-2.31.so
+0000007ff7fb6000      16       4       4 rw---   [ anon ]
+0000007ff7fcc000     136     136       0 r-x-- ld-2.31.so
+0000007ff7ff6000      16       8       8 rw---   [ anon ]
+0000007ff7ffa000       8       0       0 r----   [ anon ]
+0000007ff7ffc000       4       4       0 r-x--   [ anon ]
+0000007ff7ffd000       4       4       4 r---- ld-2.31.so
+0000007ff7ffe000       8       8       8 rw--- ld-2.31.so
+0000007ffffdf000     132      12      12 rw---   [ stack ]
+---------------- ------- ------- ------- 
+total kB           29800    1296     116
 
+```
+
+Especially the 'mode' column is important since it shows us the permission of the addresses in the process.
+
+The permissions for the stack are both read and write but not executable. This makes sense. The process needs to be able to see what is on the stack (read), and add new items to the stack (write). It is not executable. This is to prevent the stack from executing again. Doing this would create a massive load ont he processor (since all instructions are executed at the same time) whereas only one instruction at the time needs to be called.
 
 
 ## Assignment 15: *ASLR*
@@ -268,7 +377,7 @@ This means that we need to subtract 368 when asked for the votes. Doing this res
 This confirms the theory that this flag does not protect against this exploit.
 
 
-## REDO Assignment 25: *ASLR enabled*
+## Assignment 25: *ASLR enabled*
 
 The following exploits were considered:
 | Exploit | No ASLR - Work without flag |  No ASLR - Work with Flag | With ASLR - Work without flag |  With ASLR - Work with Flag |
